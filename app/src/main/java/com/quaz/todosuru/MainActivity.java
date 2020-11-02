@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int EDIT_NOTE_REQUEST = 2;
 
 
-    private NoteViewModel noteViewModel;
+    private TodoViewModel todoViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         buttonAddNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddEditNoteActivity.class);
+                Intent intent = new Intent(MainActivity.this, AddEditTodoActivity.class);
                 startActivityForResult(intent, ADD_NOTE_REQUEST);
             }
         });
@@ -47,18 +47,18 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
-       final NoteAdapter adapter = new NoteAdapter();
+       final TodoAdapter adapter = new TodoAdapter();
        recyclerView.setAdapter(adapter);
 
 
 
-        noteViewModel = new ViewModelProvider
+        todoViewModel = new ViewModelProvider
                 .AndroidViewModelFactory(getApplication())
-                .create(NoteViewModel.class);
-        noteViewModel.getAllNotes().observe(this, new Observer<List<Note>>() {
+                .create(TodoViewModel.class);
+        todoViewModel.getAllNotes().observe(this, new Observer<List<Todo>>() {
             @Override
-            public void onChanged(@Nullable List<Note> notes) {
-                adapter.submitList(notes);
+            public void onChanged(@Nullable List<Todo> todos) {
+                adapter.submitList(todos);
             }
         });
 
@@ -71,20 +71,20 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                noteViewModel.delete(adapter.getNoteAt(viewHolder.getAdapterPosition()));
-                Toast.makeText(MainActivity.this, "Note Deleted", Toast.LENGTH_SHORT).show();
+                todoViewModel.delete(adapter.getTodoAt(viewHolder.getAdapterPosition()));
+                Toast.makeText(MainActivity.this, "Todo Deleted", Toast.LENGTH_SHORT).show();
             }
         }).attachToRecyclerView(recyclerView);
 
-        adapter.setOnItemClickListener(new NoteAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new TodoAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(Note note) {
-                Intent intent = new Intent(MainActivity.this, AddEditNoteActivity.class);
+            public void onItemClick(Todo todo) {
+                Intent intent = new Intent(MainActivity.this, AddEditTodoActivity.class);
 
-                intent.putExtra(AddEditNoteActivity.EXTRA_ID, note.getId());
-                intent.putExtra(AddEditNoteActivity.EXTRA_TITLE, note.getTitle());
-                intent.putExtra(AddEditNoteActivity.EXTRA_DESCRIPTION, note.getDescription());
-                intent.putExtra(AddEditNoteActivity.EXTRA_PRIORITY, note.getPriority());
+                intent.putExtra(AddEditTodoActivity.EXTRA_ID, todo.getId());
+                intent.putExtra(AddEditTodoActivity.EXTRA_TITLE, todo.getTitle());
+                intent.putExtra(AddEditTodoActivity.EXTRA_DESCRIPTION, todo.getDescription());
+                intent.putExtra(AddEditTodoActivity.EXTRA_PRIORITY, todo.getPriority());
                 startActivityForResult(intent, EDIT_NOTE_REQUEST);
 
             }
@@ -97,32 +97,32 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == ADD_NOTE_REQUEST && resultCode == RESULT_OK){
-            String title = data.getStringExtra(AddEditNoteActivity.EXTRA_TITLE);
-            String description = data.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION);
-            int priority = data.getIntExtra(AddEditNoteActivity.EXTRA_PRIORITY,1);
+            String title = data.getStringExtra(AddEditTodoActivity.EXTRA_TITLE);
+            String description = data.getStringExtra(AddEditTodoActivity.EXTRA_DESCRIPTION);
+            int priority = data.getIntExtra(AddEditTodoActivity.EXTRA_PRIORITY,1);
 
-            Note note = new Note(title, description, priority);
-            noteViewModel.insert(note);
+            Todo todo = new Todo(title, description, priority);
+            todoViewModel.insert(todo);
 
-            Toast.makeText(this, "Note Saved", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Todo Saved", Toast.LENGTH_SHORT).show();
         }
         else if (requestCode == EDIT_NOTE_REQUEST && resultCode == RESULT_OK) {
-            int id = data.getIntExtra(AddEditNoteActivity.EXTRA_ID, -1);
+            int id = data.getIntExtra(AddEditTodoActivity.EXTRA_ID, -1);
 
             if(id == -1){
-                Toast.makeText(this, "Cannot Update Note", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Cannot Update Todo", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            String title = data.getStringExtra(AddEditNoteActivity.EXTRA_TITLE);
-            String description = data.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION);
-            int priority = data.getIntExtra(AddEditNoteActivity.EXTRA_PRIORITY,1);
+            String title = data.getStringExtra(AddEditTodoActivity.EXTRA_TITLE);
+            String description = data.getStringExtra(AddEditTodoActivity.EXTRA_DESCRIPTION);
+            int priority = data.getIntExtra(AddEditTodoActivity.EXTRA_PRIORITY,1);
 
-            Note note = new Note(title, description, priority);
-            note.setId(id);
-            noteViewModel.update(note);
+            Todo todo = new Todo(title, description, priority);
+            todo.setId(id);
+            todoViewModel.update(todo);
 
-            Toast.makeText(this, "Note Updated", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Todo Updated", Toast.LENGTH_SHORT).show();
         }
 
         else{
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.delete_all_notes:
-                noteViewModel.deleteAllNotes();
+                todoViewModel.deleteAllNotes();
                 Toast.makeText(this, "All Notes Deleted", Toast.LENGTH_SHORT).show();
                 return true;
             default:

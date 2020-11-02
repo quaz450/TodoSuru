@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
-public class AddEditNoteActivity extends AppCompatActivity {
+public class AddEditTodoActivity extends AppCompatActivity {
 
     public static final String EXTRA_ID = "com.quaz.todosuru.EXTRA_ID";
     public static final String EXTRA_TITLE = "com.quaz.todosuru.EXTRA_TITLE";
@@ -40,13 +40,13 @@ public class AddEditNoteActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         if (intent.hasExtra(EXTRA_ID)) {
-            setTitle("Edit Note");
+            setTitle("Edit Todo");
             editTextTitle.setText(intent.getStringExtra(EXTRA_TITLE));
             editTextDescription.setText(intent.getStringExtra(EXTRA_DESCRIPTION));
             numberPickerPriority.setValue(intent.getIntExtra(EXTRA_PRIORITY, 1));
 
         } else {
-            setTitle("Add Note");
+            setTitle("Add Todo");
         }
     }
 

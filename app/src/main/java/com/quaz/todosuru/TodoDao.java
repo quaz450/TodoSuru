@@ -10,19 +10,19 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 @Dao
-public interface NoteDao {
+public interface TodoDao {
     @Insert
-    void insert(Note note);
+    void insert(Todo todo);
 
     @Update
-    void update(Note note);
+    void update(Todo todo);
 
     @Delete
-    void delete(Note note);
+    void delete(Todo todo);
 
-    @Query("DELETE FROM note_table")
-    void deleteAllNotes();
+    @Query("DELETE FROM todo_table")
+    void deleteAllTodos();
 
-    @Query("SELECT * FROM note_table ORDER BY priority ASC")
-    LiveData<List<Note>> getAllNotes();
+    @Query("SELECT * FROM todo_table ORDER BY priority ASC")
+    LiveData<List<Todo>> getAllTodos();
 }
