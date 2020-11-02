@@ -11,12 +11,12 @@ import androidx.annotation.NonNull;
 public class TodoViewModel extends AndroidViewModel {
 
     private TodoRepo repository;
-    private LiveData<List<Todo>> allNotes;
+    private LiveData<List<Todo>> allTodos;
 
     public TodoViewModel(@NonNull Application application) {
         super(application);
         repository = new TodoRepo(application);
-        allNotes = repository.getAllTodos();
+        allTodos = repository.getAllTodos();
     }
 
     public void insert(Todo todo){
@@ -31,11 +31,11 @@ public class TodoViewModel extends AndroidViewModel {
         repository.delete(todo);
     }
 
-    public void deleteAllNotes(){
+    public void deleteAllTodos(){
         repository.deleteAllTodos();
     }
 
-    public LiveData<List<Todo>> getAllNotes(){
-        return allNotes;
+    public LiveData<List<Todo>> getAllTodos(){
+        return allTodos;
     }
 }

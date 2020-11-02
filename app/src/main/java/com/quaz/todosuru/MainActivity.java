@@ -23,8 +23,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MainActivity extends AppCompatActivity {
-    public static final int ADD_NOTE_REQUEST = 1;
-    public static final int EDIT_NOTE_REQUEST = 2;
+    public static final int ADD_TODO_REQUEST = 1;
+    public static final int EDIT_TODO_REQUEST = 2;
 
 
     private TodoViewModel todoViewModel;
@@ -34,12 +34,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FloatingActionButton buttonAddNote = findViewById(R.id.button_add_note);
-        buttonAddNote.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton buttonAddTodo = findViewById(R.id.button_add_todo);
+        buttonAddTodo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AddEditTodoActivity.class);
-                startActivityForResult(intent, ADD_NOTE_REQUEST);
+                startActivityForResult(intent, ADD_TODO_REQUEST);
             }
         });
 
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         todoViewModel = new ViewModelProvider
                 .AndroidViewModelFactory(getApplication())
                 .create(TodoViewModel.class);
-        todoViewModel.getAllNotes().observe(this, new Observer<List<Todo>>() {
+        todoViewModel.getAllTodos().observe(this, new Observer<List<Todo>>() {
             @Override
             public void onChanged(@Nullable List<Todo> todos) {
                 adapter.submitList(todos);
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra(AddEditTodoActivity.EXTRA_TITLE, todo.getTitle());
                 intent.putExtra(AddEditTodoActivity.EXTRA_DESCRIPTION, todo.getDescription());
                 intent.putExtra(AddEditTodoActivity.EXTRA_PRIORITY, todo.getPriority());
-                startActivityForResult(intent, EDIT_NOTE_REQUEST);
+                startActivityForResult(intent, EDIT_TODO_REQUEST);
 
             }
         });
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == ADD_NOTE_REQUEST && resultCode == RESULT_OK){
+        if (requestCode == ADD_TODO_REQUEST && resultCode == RESULT_OK){
             String title = data.getStringExtra(AddEditTodoActivity.EXTRA_TITLE);
             String description = data.getStringExtra(AddEditTodoActivity.EXTRA_DESCRIPTION);
             int priority = data.getIntExtra(AddEditTodoActivity.EXTRA_PRIORITY,1);
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
             Toast.makeText(this, "Todo Saved", Toast.LENGTH_SHORT).show();
         }
-        else if (requestCode == EDIT_NOTE_REQUEST && resultCode == RESULT_OK) {
+        else if (requestCode == EDIT_TODO_REQUEST && resultCode == RESULT_OK) {
             int id = data.getIntExtra(AddEditTodoActivity.EXTRA_ID, -1);
 
             if(id == -1){
@@ -140,9 +140,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.delete_all_notes:
-                todoViewModel.deleteAllNotes();
-                Toast.makeText(this, "All Notes Deleted", Toast.LENGTH_SHORT).show();
+            case R.id.delete_all_todos:
+                todoViewModel.deleteAllTodos();
+                Toast.makeText(this, "All Todos Deleted", Toast.LENGTH_SHORT).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

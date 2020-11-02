@@ -26,7 +26,7 @@ public class AddEditTodoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_note);
+        setContentView(R.layout.activity_add_todo);
 
         editTextTitle = findViewById(R.id.edit_text_title);
         editTextDescription = findViewById(R.id.edit_text_description);
@@ -50,7 +50,7 @@ public class AddEditTodoActivity extends AppCompatActivity {
         }
     }
 
-    private void saveNote() {
+    private void saveTodo() {
         String title = editTextTitle.getText().toString();
         String description = editTextDescription.getText().toString();
         int priority = numberPickerPriority.getValue();
@@ -79,15 +79,15 @@ public class AddEditTodoActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.add_note_menu, menu);
+        menuInflater.inflate(R.menu.add_todo_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.save_note:
-                saveNote();
+            case R.id.save_todo:
+                saveTodo();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
